@@ -47,6 +47,11 @@ fn main() {
     println!("Problem Name: {}", problem_name);
     let mut problem_lines: Vec<String> =
         problem.split("\n").map(|line| String::from(line)).collect();
+    for line in &mut problem_lines {
+        if line.ends_with("\r") {
+            line.pop().unwrap();
+        }
+    }
     while problem_lines.last().unwrap().trim().len() == 0 {
         println!("Problem Lines Pop: {}", problem_lines.pop().unwrap());
     }
