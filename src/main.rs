@@ -144,7 +144,7 @@ fn main() {
                             if books_in_library_left.len() > 0 {
                                 let (book, score_of_book) = books_in_library_left.pop().unwrap();
                                 *score += score_of_book;
-                                books.push(score_of_book);
+                                books.push(book);
                             }
                         }
                     }
