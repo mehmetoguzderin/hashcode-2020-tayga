@@ -119,7 +119,7 @@ fn main() {
         libraries_left.insert(library);
     }
 
-    while number_of_days_left > 0 {
+    while number_of_days_left > 0 && libraries_left.len() > 0 {
         let mut scores_of_libraries: Vec<(i32, i32, Vec<i32>)> = libraries_left
             .iter()
             .map(|index| (*index, 0, Vec::new()))
@@ -152,6 +152,12 @@ fn main() {
             });
         scores_of_libraries.par_sort_unstable_by_key(|(library, score, books)| score.clone());
         let (library, score, books) = scores_of_libraries.pop().unwrap();
+        for book in &books {
+            books_left.remove(&*book);
+        }
+        libraries_left.remove(&library);
+        process.0 += score;
+        process.1.push((library, books));
         number_of_days_left -= number_of_days_in_library[library as usize];
     }
 
