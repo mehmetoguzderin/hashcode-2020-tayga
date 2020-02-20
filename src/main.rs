@@ -5,5 +5,33 @@ fn main() {
     let d_tough_choices = include_str!("data/d_tough_choices.txt");
     let e_so_many_books = include_str!("data/e_so_many_books.txt");
     let f_libraries_of_the_world = include_str!("data/f_libraries_of_the_world.txt");
-    println!("Hello, world!");
+    
+    let problem_name;
+    let problem;
+
+    let args: Vec<String> = std::env::args().collect();
+
+    if (args[1] == "a_example") {
+        problem_name = String::from("a_example");
+        problem = String::from(a_example);
+    } else if (args[1] == "b_read_on") {
+        problem_name = String::from("b_read_on");
+        problem = String::from(b_read_on);
+    } else if (args[1] == "c_incunabula") {
+        problem_name = String::from("c_incunabula");
+        problem = String::from(c_incunabula);
+    } else if (args[1] == "d_tough_choices") {
+        problem_name = String::from("d_tough_choices");
+        problem = String::from(d_tough_choices);
+    } else if (args[1] == "e_so_many_books") {
+        problem_name = String::from("e_so_many_books");
+        problem = String::from(e_so_many_books);
+    } else if (args[1] == "f_libraries_of_the_world") {
+        problem_name = String::from("f_libraries_of_the_world");
+        problem = String::from(f_libraries_of_the_world);
+    } else {
+        return
+    }
+
+    println!("Problem Name: {}", problem_name);
 }
