@@ -1,3 +1,9 @@
+# Team
+- Mehmet Oguz Derin
+- Arda Sevinc
+- Burak Cabadan
+- Emirhan Tasdeviren
+# Tools
 ```
 cargo run --release -- a_example
 cargo run --release -- b_read_on
