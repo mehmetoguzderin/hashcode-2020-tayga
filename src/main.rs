@@ -102,11 +102,53 @@ fn main() {
     }
 
     println!("Library {} has {} books, the signup process takes {} days, and the library can ship {} books per day.", 0, number_of_books_in_library[0], number_of_days_in_library[0], number_of_shipments_in_library[0]);
-    println!("The books in library {} are: book {}.", 0, books_in_library[0][0]);
+    println!(
+        "The books in library {} are: book {}.",
+        0, books_in_library[0][0]
+    );
 
+    let mut process: Vec<(i32, Vec<i32>)> = Vec::new();
     
-    let mut scores_of_libraries: Vec<(i32, i32, Vec<i32>)> = (0..number_of_libraries).map(|index| (index, 0, Vec::new())).collect();
-    scores_of_libraries.par_iter_mut().for_each(|(library, score, books)| {
-        *score = 100;
-    });
+    let mut number_of_days_left = number_of_days;
+    let mut books_left: std::collections::HashSet<i32> = std::collections::HashSet::new();
+    for book in 0..number_of_different_books {
+        books_left.insert(book);
+    }
+    let mut libraries_left: std::collections::HashSet<i32> = std::collections::HashSet::new();
+    for library in 0..number_of_libraries {
+        libraries_left.insert(library);
+    }
+    let mut scores_of_libraries: Vec<(i32, i32, Vec<i32>)> = libraries_left
+        .iter()
+        .map(|index| (*index, 0, Vec::new()))
+        .collect();
+    scores_of_libraries
+        .par_iter_mut()
+        .for_each(|(library, score, books)| {
+            let number_of_shipment_days =
+                number_of_days_left - number_of_days_in_library[*library as usize];
+
+            if number_of_shipment_days >= 0 {
+                let mut books_in_library_left: Vec<(i32, i32)> = Vec::new();
+                for book in &books_in_library[*library as usize] {
+                    if books_left.contains(&*book) {
+                        books_in_library_left.push((*book, scores[*book as usize]));
+                    }
+                }
+                books_in_library_left.sort_by_key(|(book, score_of_book)| score_of_book.clone());
+                for shipment_day in 0..number_of_shipment_days {
+                    for shipment in 0..number_of_shipments_in_library[*library as usize] {
+                        if books_in_library_left.len() > 0 {
+                            let (book, score_of_book) = books_in_library_left.pop().unwrap();
+                            *score += score_of_book;
+                            books.push(score_of_book);
+                        }
+                    }
+                }
+            }
+        });
+    scores_of_libraries.par_sort_unstable_by_key(|(library, score, books)| score.clone());
+    let highest_score = scores_of_libraries.pop().unwrap();
+
+    println!("{:?}", scores_of_libraries);
 }
