@@ -1,4 +1,5 @@
 use rayon::prelude::*;
+use std::io::prelude::*;
 
 fn main() {
     let a_example = include_str!("data/a_example.txt");
@@ -161,5 +162,16 @@ fn main() {
         number_of_days_left -= number_of_days_in_library[library as usize];
     }
 
-    println!("{:?}", process);
+    println!("Estimated Score: {}", process.0);
+
+    let mut submission = String::new();
+
+    submission.push_str(&format!("{}\n", process.1.len()));
+
+    for library in process.1 {
+        submission.push_str(&format!("{} {}\n", library.0, library.1.len()));
+        submission.push_str(&format!("{}\n", library.1.iter().map(|book| book.to_string()).collect::<Vec<String>>().join(" ")));
+    }
+    
+    std::fs::write(format!("submission/{}.txt", problem_name), &submission).unwrap();
 }
