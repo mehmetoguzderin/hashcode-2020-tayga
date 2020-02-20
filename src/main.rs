@@ -104,8 +104,9 @@ fn main() {
     println!("Library {} has {} books, the signup process takes {} days, and the library can ship {} books per day.", 0, number_of_books_in_library[0], number_of_days_in_library[0], number_of_shipments_in_library[0]);
     println!("The books in library {} are: book {}.", 0, books_in_library[0][0]);
 
-    let mut scores_of_libraries: Vec<(i32, i32)> = (0..number_of_libraries).map(|index| (index, 0)).collect();
-    scores_of_libraries.par_iter_mut().for_each(|(library, score)| {
+    
+    let mut scores_of_libraries: Vec<(i32, i32, Vec<i32>)> = (0..number_of_libraries).map(|index| (index, 0, Vec::new())).collect();
+    scores_of_libraries.par_iter_mut().for_each(|(library, score, books)| {
         *score = 100;
     });
 }
